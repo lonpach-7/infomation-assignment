@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Registration</h2>
+        <form id="registrationForm" autocomplete="on">
+            <div class="form-group">
+                <label for="fullName">Full Name:</label>
+                <input type="text" class="form-control" id="fullName" name="fullName" autocomplete="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email address:</label>
+                <input type="email" class="form-control" id="email" name="email" autocomplete="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <div class="input-group">
+                    <input type="password" class="form-control" id="password" name="password" required pattern="(?=.*\d)(?=.*[a-zA-Z]).{8,}" title="Password must contain at least 8 characters, including at least one number.">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">Show</button>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button>
+        </form>
+        <div id="registrationAlert"></div>
+    </div>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+    <script>
+        document.getElementById('registrationForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+    
+            var fullName = document.getElementById('fullName').value; // Corrected ID
+            var email = document.getElementById('email').value; // Corrected ID
+            var password = document.getElementById('password').value; // Corrected ID
+    
+            // Check if password meets criteria
+            if (!password.match(/^(?=.*\d)(?=.*[a-zA-Z]).{8,}$/)) {
+                document.getElementById('registrationAlert').innerHTML = '<div class="alert alert-danger" role="alert">Password must contain at least 8 characters, including at least one number.</div>';
+                return;
+            }
+    
+            // Make AJAX request to save data
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'connect.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        document.getElementById('registrationAlert').innerHTML = '<div class="alert alert-success" role="alert">Registration successful! Please check your email for verification.</div>';
+                        // Clear form fields after successful registration
+                        document.getElementById('registrationForm').reset();
+                        // Redirect to login page after a brief delay
+                        setTimeout(function() {
+                            window.location.href = 'login.html'; // Change the URL to your login page
+                        }, 3000); // 3 seconds delay, adjust as needed
+                    } else {
+                        document.getElementById('registrationAlert').innerHTML = '<div class="alert alert-danger" role="alert">An error occurred while processing your request. Please try again later.</div>';
+                    }
+                }
+            };
+            var formData = 'fullName=' + encodeURIComponent(fullName) + '&email=' + encodeURIComponent(email) + '&password=' + encodeURIComponent(password);
+            xhr.send(formData);
+    
+            // Simulate sending a confirmation email (replace this with actual email sending code on the server)
+            setTimeout(function() {
+                console.log('Confirmation email sent to: ' + email);
+            }, 2000); // Simulated delay of 2 seconds
+        });
+    </script>
+    
+</body>
+</html>

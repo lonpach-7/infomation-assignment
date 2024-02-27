@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICT Help Desk</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">lonpach@7</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="register.html">Register</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div style="background-color:lightgreen;" onload="init()">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h1 class="display-4 text-center">Info Based Assignment System</h1>
+                </div>
+
+                <div class="jumbotron col-sm-6" style="background-color:lightblue;">
+                    <form id="loginForm" autocomplete="on">
+                        <h1>Login</h1>
+                        <div class="form-group">
+                            <label for="emailLogin">Email:</label>
+                            <input type="email" class="form-control" id="emailLogin" autocomplete="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="pwdLogin">Password:</label>
+                            <input type="password" class="form-control" id="pwdLogin" required>
+                        </div>
+
+                        <!-- Change type to "submit" to trigger form submission -->
+                        <button type="submit" class="btn btn-success">Login</button>
+                    </form>
+                    <div><a href="register.html">Click here to register</a></div>
+                    <div id="loginAlert"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+    <script>
+      // Function to handle form submission
+      document.getElementById('loginForm').addEventListener('submit', function(event) {
+          event.preventDefault(); // Prevent default form submission
+          login(); // Call login function
+      });
+
+      // Function to handle login
+      function login() {
+          // Retrieve email and password
+          var email = document.getElementById('emailLogin').value;
+          var password = document.getElementById('pwdLogin').value;
+
+          // Make AJAX request to authenticate user
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', 'login.html', true);
+          xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+          xhr.onreadystatechange = function() {
+              if (xhr.readyState === XMLHttpRequest.DONE) {
+                  if (xhr.status === 200) {
+                      // Redirect to form.html if login is successful
+                      window.location.href = 'form.html';
+                  } else {
+                      // Display error message if login fails
+                      document.getElementById('loginAlert').innerHTML = '<div class="alert alert-danger" role="alert">Invalid email or password</div>';
+                  }
+              }
+          };
+          var formData = 'email=' + encodeURIComponent(email) + '&password=' + encodeURIComponent(password);
+          xhr.send(formData);
+      }
+  </script>
+</body>
+</html>
